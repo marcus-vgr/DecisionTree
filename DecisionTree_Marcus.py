@@ -40,7 +40,7 @@ class DecisionTreeClassifier:
             #Check if info gain is positive
             if best_split['info_gain'] > 0:
                 left_subtree = self.build_tree(best_split['dataset_left'], curr_depth+1)
-                right_subtree = self.build_tree(best_split['dataset_left'], curr_depth+1)
+                right_subtree = self.build_tree(best_split['dataset_right'], curr_depth+1)
                 # return Node
                 return Node(best_split['feature_index'], best_split['threshold'], left_subtree, right_subtree, 
                 best_split['info_gain'])
