@@ -39,14 +39,14 @@ class DecisionTreeClassifier:
             best_split = self.get_best_split(dataset, num_features)
             #Check if info gain is positive
             if best_split['info_gain'] > 0:
-                left_subtree = self.build_tree(best_split['left_tree'], curr_depth+1)
-                right_subtree = self.build_tree(best_split['right_tree'], curr_depth+1)
+                left_subtree = self.build_tree(best_split['dataset_left'], curr_depth+1)
+                right_subtree = self.build_tree(best_split['dataset_left'], curr_depth+1)
                 # return Node
                 return Node(best_split['feature_index'], best_split['threshold'], left_subtree, right_subtree, 
                 best_split['info_gain'])
 
         # compute leaf node
-        leaf_value = self.calculate_leaf_value(Y)
+        leaf_value = self.calculate_leaf_node(Y)
         return Node(value=leaf_value)
 
     def get_best_split(self, dataset, num_features):
@@ -83,8 +83,8 @@ class DecisionTreeClassifier:
     def split(self, dataset, feature_index, threshold):
         '''to Split data given a threshold'''
 
-        dataset_left = [row for row in dataset if row[feature_index] <= threshold]
-        dataset_right = [row for row in dataset if row[feature_index] > threshold]
+        dataset_left = np.array([row for row in dataset if row[feature_index] <= threshold])
+        dataset_right = np.array([row for row in dataset if row[feature_index] > threshold])
         return dataset_left, dataset_right
 
     def information_gain(self, parent, l_child, r_child): 
@@ -100,13 +100,18 @@ class DecisionTreeClassifier:
     def gini_index(self, y):
         '''Calculate gini index'''
 
-        class_labels = np.unique(y):
+        class_labels = np.unique(y)
         gini = 0
         for c in class_labels:
             probability_c = len(y[y==c]) / len(y)
             gini += probability_c**2
         
         return 1 - gini
+
+    def calculate_leaf_node(self, Y):
+        '''function to compute leaf node'''
+        Y = list(Y)
+        return max(Y, key=Y.count)
 
     def fit(self, X, Y):
         '''function to train the tree'''
