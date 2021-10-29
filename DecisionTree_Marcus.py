@@ -137,3 +137,19 @@ class DecisionTreeClassifier:
         else:
             return self.make_prediction(x, tree.right)
 
+
+    def print_tree(self, tree=None):
+        '''Function to print tree'''
+
+        if not tree:
+            tree = self.root
+        
+        if tree.value is not None:
+            print(tree.value)
+        
+        else:
+            print(f'X_{tree.feature_index} <= {tree.threshold} ? Info gain = {tree.info_gain}')
+            print("     left:", end="")
+            self.print_tree(tree.left)
+            print("     right:", end="")
+            self.print_tree(tree.right)
